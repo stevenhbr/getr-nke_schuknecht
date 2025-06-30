@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const tableBody = document.querySelector("#drink-table tbody");
+    const form = document.getElementById("add-form");
     const nameInput = document.getElementById("name");
-    const addButton = document.getElementById("add-button");
 
     let drinks = JSON.parse(localStorage.getItem("drinks") || "[]");
 
@@ -13,17 +13,17 @@ document.addEventListener("DOMContentLoaded", () => {
         tableBody.innerHTML = "";
         drinks.forEach((drink, index) => {
             const row = document.createElement("tr");
-            row.innerHTML = \`
-                <td>\${drink.name}</td>
-                <td class="status-\${drink.status.toLowerCase()}">\${drink.status}</td>
-                <td>\${drink.emptyDate || "-"}</td>
-                <td>\${drink.orderDate || "-"}</td>
+            row.innerHTML = `
+                <td>${drink.name}</td>
+                <td class="status-${drink.status.toLowerCase()}">${drink.status}</td>
+                <td>${drink.emptyDate || "-"}</td>
+                <td>${drink.orderDate || "-"}</td>
                 <td>
-                    <button onclick="markEmpty(\${index})">🚫 Leer</button>
-                    <button onclick="markOrdered(\${index})">📦 Bestellt</button>
-                    <button onclick="markAvailable(\${index})">✅ Verfügbar</button>
+                    <button onclick="markEmpty(${index})">🚫 Leer</button>
+                    <button onclick="markOrdered(${index})">📦 Bestellt</button>
+                    <button onclick="markAvailable(${index})">✅ Verfügbar</button>
                 </td>
-            \`;
+            `;
             tableBody.appendChild(row);
         });
     }
@@ -51,7 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
         render();
     }
 
-    addButton.onclick = function () {
+    form.addEventListener("submit", e => {
+        e.preventDefault();
         const name = nameInput.value.trim();
         if (name) {
             drinks.push({ name, status: "Verfügbar", emptyDate: "", orderDate: "" });
@@ -59,7 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
             nameInput.value = "";
             render();
         }
-    };
+    });
 
     render();
 });
+
